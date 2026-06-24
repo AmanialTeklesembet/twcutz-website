@@ -1,7 +1,7 @@
 {
   "services": [
     {
-      "id": "svc_8323f73d0375",
+      "id": "svc_973af7a03b83",
       "nameNo": "Skinfade",
       "nameEn": "Skin Fade",
       "descriptionNo": "Ren fade med skarp overgang, styling og finish.",
@@ -11,7 +11,7 @@
       "active": true
     },
     {
-      "id": "svc_25cb8a127411",
+      "id": "svc_5ac1d3c2caba",
       "nameNo": "Klipp og skjegg",
       "nameEn": "Haircut and Beard",
       "descriptionNo": "Komplett klipp, skjeggform og linjer med premium finish.",
@@ -21,7 +21,7 @@
       "active": true
     },
     {
-      "id": "svc_b03071191504",
+      "id": "svc_4289ce610d25",
       "nameNo": "Line-up",
       "nameEn": "Line-up",
       "descriptionNo": "Skarpe kanter rundt hårfeste og skjegg.",
@@ -34,21 +34,21 @@
   "bookings": [],
   "gallery": [
     {
-      "id": "gal_18d6f112d063",
+      "id": "gal_580279afba3c",
       "image": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1200&q=80",
       "title": "Low fade detail",
       "category": "fades",
       "published": true
     },
     {
-      "id": "gal_bb8e42846198",
+      "id": "gal_2de8123846e5",
       "image": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1200&q=80",
       "title": "Fresh profile",
       "category": "cuts",
       "published": true
     },
     {
-      "id": "gal_33786b88f887",
+      "id": "gal_6ba415cafb0a",
       "image": "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1200&q=80",
       "title": "Studio mood",
       "category": "studio",
@@ -64,9 +64,9 @@
   },
   "adminUsers": [
     {
-      "id": "adm_c5088a355a25",
+      "id": "adm_7d4d37d19b09",
       "email": "admin@twcutz.no",
-      "passwordHash": "d4d23ed51ddb2b751abda87309b49666:7b5e6341c77341d25b4def37c34c6bd854b76690fdc7f046262f8abfac9c61cd",
+      "passwordHash": "b23bef5c35414ed9eeb535234ca663de:db1e56117cfefcb02aeb5d0d8cfacc17c8bc94b53e60efb607d8834bc6abfacd",
       "role": "owner"
     }
   ]
