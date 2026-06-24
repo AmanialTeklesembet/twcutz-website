@@ -32,6 +32,32 @@
     }
   ],
   "bookings": [],
+  "availabilitySlots": [
+    {
+      "id": "slot_20260625_1200",
+      "date": "2026-06-25",
+      "time": "12:00",
+      "status": "ledig",
+      "active": true,
+      "note": "Åpen time"
+    },
+    {
+      "id": "slot_20260625_1430",
+      "date": "2026-06-25",
+      "time": "14:30",
+      "status": "ledig",
+      "active": true,
+      "note": "Åpen time"
+    },
+    {
+      "id": "slot_20260626_1600",
+      "date": "2026-06-26",
+      "time": "16:00",
+      "status": "ledig",
+      "active": true,
+      "note": "Åpen time"
+    }
+  ],
   "gallery": [
     {
       "id": "gal_580279afba3c",

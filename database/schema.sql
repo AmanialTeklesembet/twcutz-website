@@ -19,12 +19,28 @@ create table bookings (
   phone text not null,
   email text,
   service_id uuid references services(id),
+  slot_id uuid,
   date date not null,
   time time not null,
   status text not null check (status in ('ny', 'bekreftet', 'fullført', 'kansellert')) default 'ny',
   comment text,
   created_at timestamptz not null default now()
 );
+
+create table availability_slots (
+  id uuid primary key default gen_random_uuid(),
+  date date not null,
+  time time not null,
+  status text not null check (status in ('ledig', 'reservert', 'stengt')) default 'ledig',
+  active boolean not null default true,
+  note text,
+  booking_id uuid references bookings(id),
+  created_at timestamptz not null default now()
+);
+
+alter table bookings
+  add constraint bookings_slot_id_fkey
+  foreign key (slot_id) references availability_slots(id);
 
 create table gallery (
   id uuid primary key default gen_random_uuid(),

@@ -267,6 +267,11 @@ h2 {
   font-size: 13px;
 }
 
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+}
+
 .profile-strip,
 .section,
 .site-footer {
@@ -568,6 +573,11 @@ textarea:focus {
 .admin-dashboard {
   display: grid;
   gap: 18px;
+}
+
+.slot-list {
+  display: grid;
+  gap: 12px;
 }
 
 .hidden,

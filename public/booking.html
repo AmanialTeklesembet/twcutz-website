@@ -22,10 +22,10 @@
     <main>
       <section class="page-hero"><p class="eyebrow" data-i18n="bookingEyebrow">Booking</p><h1 data-i18n="bookingTitle">Send bookingforespørsel</h1></section>
       <section class="section booking-layout">
-        <div class="booking-note"><p data-i18n="bookingCopy">Velg tjeneste, dato og klokkeslett. Eier bekrefter forespørselen i adminpanelet.</p></div>
+        <div class="booking-note"><p data-i18n="bookingCopy">Velg tjeneste, dato og en ledig time. Eier bekrefter forespørselen i adminpanelet.</p></div>
         <form class="form-panel" id="bookingForm">
           <label><span data-i18n="fieldService">Tjeneste</span><select name="serviceId" required></select></label>
-          <div class="form-row"><label><span data-i18n="fieldDate">Dato</span><input name="date" type="date" required></label><label><span data-i18n="fieldTime">Klokkeslett</span><input name="time" type="time" required></label></div>
+          <div class="form-row"><label><span data-i18n="fieldDate">Dato</span><input name="date" type="date" required></label><label><span data-i18n="fieldTime">Ledig time</span><select name="slotId" required></select></label></div>
           <label><span data-i18n="fieldName">Navn</span><input name="customerName" autocomplete="name" required></label>
           <div class="form-row"><label><span data-i18n="fieldPhone">Telefon</span><input name="phone" autocomplete="tel" required></label><label><span data-i18n="fieldEmail">E-post</span><input name="email" type="email" autocomplete="email"></label></div>
           <label><span data-i18n="fieldComment">Kommentar</span><textarea name="comment" rows="4"></textarea></label>

@@ -79,6 +79,32 @@ function createSeedData() {
       }
     ],
     bookings: [],
+    availabilitySlots: [
+      {
+        id: id("slot"),
+        date: "2026-06-25",
+        time: "12:00",
+        status: "ledig",
+        active: true,
+        note: "Åpen time"
+      },
+      {
+        id: id("slot"),
+        date: "2026-06-25",
+        time: "14:30",
+        status: "ledig",
+        active: true,
+        note: "Åpen time"
+      },
+      {
+        id: id("slot"),
+        date: "2026-06-26",
+        time: "16:00",
+        status: "ledig",
+        active: true,
+        note: "Åpen time"
+      }
+    ],
     gallery: [
       {
         id: id("gal"),
@@ -125,9 +151,18 @@ function ensureDb() {
   if (!fs.existsSync(DB_FILE)) writeDb(createSeedData());
 }
 
+function normalizeDb(db) {
+  if (!Array.isArray(db.availabilitySlots)) db.availabilitySlots = [];
+  db.bookings = (db.bookings || []).map(booking => ({
+    slotId: "",
+    ...booking
+  }));
+  return db;
+}
+
 function readDb() {
   ensureDb();
-  return JSON.parse(fs.readFileSync(DB_FILE, "utf8"));
+  return normalizeDb(JSON.parse(fs.readFileSync(DB_FILE, "utf8")));
 }
 
 function writeDb(db) {
@@ -209,6 +244,9 @@ function requireAdmin(req, res) {
 function publicPayload(db) {
   return {
     services: db.services.filter(service => service.active),
+    availabilitySlots: db.availabilitySlots
+      .filter(slot => slot.active && slot.status === "ledig")
+      .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)),
     gallery: db.gallery.filter(item => item.published),
     content: db.content,
     instagramUrl: "https://www.instagram.com/twcutz1/"
@@ -237,21 +275,29 @@ async function handleApi(req, res, url) {
 
   if (req.method === "POST" && url.pathname === "/api/bookings") {
     const body = await parseBody(req);
+    const slotId = sanitizeText(body.slotId, 80);
+    const slot = db.availabilitySlots.find(item => item.id === slotId);
+    if (!slot || !slot.active || slot.status !== "ledig") {
+      return sendJson(res, 400, { error: "Selected time is not available" });
+    }
     const booking = {
       id: id("book"),
       customerName: sanitizeText(body.customerName, 120),
       phone: sanitizeText(body.phone, 60),
       email: sanitizeText(body.email, 120),
       serviceId: sanitizeText(body.serviceId, 80),
-      date: sanitizeText(body.date, 20),
-      time: sanitizeText(body.time, 20),
+      slotId,
+      date: slot.date,
+      time: slot.time,
       status: "ny",
       comment: sanitizeText(body.comment, 800),
       createdAt: nowIso()
     };
-    if (!booking.customerName || !booking.phone || !booking.serviceId || !booking.date || !booking.time) {
+    if (!booking.customerName || !booking.phone || !booking.serviceId) {
       return sendJson(res, 400, { error: "Missing required booking fields" });
     }
+    slot.status = "reservert";
+    slot.bookingId = booking.id;
     db.bookings.unshift(booking);
     writeDb(db);
     return sendJson(res, 201, { ok: true, booking });
@@ -292,6 +338,7 @@ async function handleApi(req, res, url) {
     return sendJson(res, 200, {
       services: db.services,
       bookings: db.bookings,
+      availabilitySlots: db.availabilitySlots.sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)),
       gallery: db.gallery,
       messages: db.messages,
       content: db.content
@@ -326,9 +373,49 @@ async function handleApi(req, res, url) {
     const targetId = decodeURIComponent(url.pathname.split("/").pop());
     const booking = db.bookings.find(item => item.id === targetId);
     if (!booking) return sendJson(res, 404, { error: "Not found" });
-    if (["ny", "bekreftet", "fullført", "kansellert"].includes(body.status)) booking.status = body.status;
+    if (["ny", "bekreftet", "fullført", "kansellert"].includes(body.status)) {
+      booking.status = body.status;
+      const slot = db.availabilitySlots.find(item => item.id === booking.slotId);
+      if (slot) {
+        if (body.status === "kansellert") {
+          slot.status = "ledig";
+          delete slot.bookingId;
+        } else {
+          slot.status = "reservert";
+          slot.bookingId = booking.id;
+        }
+      }
+    }
     writeDb(db);
     return sendJson(res, 200, { ok: true, booking });
+  }
+
+  if (req.method === "PUT" && url.pathname === "/api/admin/availability") {
+    const body = await parseBody(req);
+    const slot = upsertById(db.availabilitySlots, {
+      id: sanitizeText(body.id, 80),
+      date: sanitizeText(body.date, 20),
+      time: sanitizeText(body.time, 20),
+      status: ["ledig", "reservert", "stengt"].includes(body.status) ? body.status : "ledig",
+      active: Boolean(body.active),
+      note: sanitizeText(body.note, 200)
+    }, "slot");
+    if (!slot.date || !slot.time) {
+      return sendJson(res, 400, { error: "Missing date or time" });
+    }
+    writeDb(db);
+    return sendJson(res, 200, { ok: true, slot });
+  }
+
+  if (req.method === "DELETE" && url.pathname.startsWith("/api/admin/availability/")) {
+    const targetId = decodeURIComponent(url.pathname.split("/").pop());
+    const slot = db.availabilitySlots.find(item => item.id === targetId);
+    if (slot?.bookingId) {
+      return sendJson(res, 400, { error: "Cannot delete a reserved slot" });
+    }
+    db.availabilitySlots = db.availabilitySlots.filter(item => item.id !== targetId);
+    writeDb(db);
+    return sendJson(res, 200, { ok: true });
   }
 
   if (req.method === "PUT" && url.pathname === "/api/admin/gallery") {

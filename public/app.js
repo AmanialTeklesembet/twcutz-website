@@ -18,10 +18,10 @@ const translations = {
     aboutTitle: "Om TW'Cutz",
     bookingEyebrow: "Booking",
     bookingTitle: "Send bookingforespørsel",
-    bookingCopy: "Velg tjeneste, dato og klokkeslett. Eier bekrefter forespørselen i adminpanelet.",
+    bookingCopy: "Velg tjeneste, dato og en ledig time. Eier bekrefter forespørselen i adminpanelet.",
     fieldService: "Tjeneste",
     fieldDate: "Dato",
-    fieldTime: "Klokkeslett",
+    fieldTime: "Ledig time",
     fieldName: "Navn",
     fieldPhone: "Telefon",
     fieldEmail: "E-post",
@@ -36,6 +36,7 @@ const translations = {
     bookingOk: "Bookingforespørsel sendt. Eier kan se den i adminpanelet.",
     contactOk: "Meldingen er sendt.",
     error: "Noe gikk galt. Prøv igjen.",
+    noSlots: "Ingen ledige tider denne datoen.",
     minutes: "min",
     homeGallery: "Se fades, klipp og detaljer.",
     homeServices: "Priser, varighet og behandlinger.",
@@ -60,10 +61,10 @@ const translations = {
     aboutTitle: "About TW'Cutz",
     bookingEyebrow: "Booking",
     bookingTitle: "Send booking request",
-    bookingCopy: "Choose a service, date and time. The owner confirms the request in the admin panel.",
+    bookingCopy: "Choose a service, date and available time. The owner confirms the request in the admin panel.",
     fieldService: "Service",
     fieldDate: "Date",
-    fieldTime: "Time",
+    fieldTime: "Available time",
     fieldName: "Name",
     fieldPhone: "Phone",
     fieldEmail: "Email",
@@ -78,6 +79,7 @@ const translations = {
     bookingOk: "Booking request sent. The owner can see it in the admin panel.",
     contactOk: "Message sent.",
     error: "Something went wrong. Try again.",
+    noSlots: "No available times on this date.",
     minutes: "min",
     homeGallery: "See fades, cuts and details.",
     homeServices: "Prices, duration and treatments.",
@@ -87,7 +89,7 @@ const translations = {
 
 let state = {
   lang: localStorage.getItem("twcutz_lang") || "no",
-  data: { services: [], gallery: [], content: {} },
+  data: { services: [], availabilitySlots: [], gallery: [], content: {} },
   adminToken: localStorage.getItem("twcutz_admin_token") || "",
   adminData: null
 };
@@ -126,6 +128,7 @@ function applyTranslations() {
 
   renderServices();
   renderBookingOptions();
+  renderAvailableTimes();
 }
 
 function escapeHtml(value) {
@@ -182,6 +185,32 @@ function renderBookingOptions() {
     const name = state.lang === "no" ? service.nameNo : service.nameEn;
     return `<option value="${escapeHtml(service.id)}">${escapeHtml(name)} - ${service.price} kr</option>`;
   }).join("");
+  const dateInput = $("#bookingForm input[name='date']");
+  if (dateInput && !dateInput.value) {
+    const firstSlot = state.data.availabilitySlots[0];
+    dateInput.min = new Date().toISOString().slice(0, 10);
+    if (firstSlot) dateInput.value = firstSlot.date;
+  }
+}
+
+function renderAvailableTimes() {
+  const form = $("#bookingForm");
+  if (!form) return;
+  const dateInput = form.querySelector("input[name='date']");
+  const slotSelect = form.querySelector("select[name='slotId']");
+  if (!dateInput || !slotSelect) return;
+
+  const slots = state.data.availabilitySlots.filter(slot => slot.date === dateInput.value);
+  if (!slots.length) {
+    slotSelect.innerHTML = `<option value="">${t("noSlots")}</option>`;
+    slotSelect.disabled = true;
+    return;
+  }
+
+  slotSelect.disabled = false;
+  slotSelect.innerHTML = slots.map(slot => `
+    <option value="${escapeHtml(slot.id)}">${escapeHtml(slot.time)}${slot.note ? ` - ${escapeHtml(slot.note)}` : ""}</option>
+  `).join("");
 }
 
 function setStatus(node, message, type = "") {
@@ -203,12 +232,19 @@ async function loadPublic() {
 function setupPublicForms() {
   const bookingForm = $("#bookingForm");
   if (bookingForm) {
+    bookingForm.querySelector("input[name='date']")?.addEventListener("change", renderAvailableTimes);
+    bookingForm.querySelector("select[name='serviceId']")?.addEventListener("change", renderAvailableTimes);
     bookingForm.addEventListener("submit", async event => {
       event.preventDefault();
       const status = $("#bookingStatus");
+      if (!bookingForm.querySelector("select[name='slotId']")?.value) {
+        setStatus(status, t("noSlots"), "error");
+        return;
+      }
       try {
         await api("/api/bookings", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
         event.currentTarget.reset();
+        await loadPublic();
         setStatus(status, t("bookingOk"), "ok");
       } catch {
         setStatus(status, t("error"), "error");
@@ -295,6 +331,7 @@ function serviceNameById(serviceId) {
 function renderAdmin() {
   if (!state.adminData) return;
   renderAdminBookings();
+  renderAdminAvailability();
   renderAdminServices();
   renderAdminGallery();
   renderAdminMessages();
@@ -323,6 +360,68 @@ function renderAdminBookings() {
   $$("[data-booking-status]").forEach(select => {
     select.addEventListener("change", async () => {
       await api(`/api/admin/bookings/${select.dataset.bookingStatus}`, { method: "PATCH", body: JSON.stringify({ status: select.value }) });
+      await loadAdmin();
+    });
+  });
+}
+
+function renderAdminAvailability() {
+  const pane = $("#availabilityAdmin");
+  if (!pane) return;
+  pane.innerHTML = `
+    <form class="form-panel" id="availabilityEditor">
+      <div class="admin-form-grid">
+        <input name="id" type="hidden">
+        <label><span>Dato</span><input name="date" type="date" required></label>
+        <label><span>Klokkeslett</span><input name="time" type="time" required></label>
+        <label><span>Status</span><select name="status"><option value="ledig">Ledig</option><option value="stengt">Stengt</option><option value="reservert">Reservert</option></select></label>
+        <label><span>Aktiv</span><select name="active"><option value="true">Aktiv</option><option value="false">Inaktiv</option></select></label>
+        <label class="wide"><span>Notat</span><input name="note" placeholder="F.eks. åpen time, drop-in, kun fades"></label>
+      </div>
+      <button class="btn primary" type="submit">Lagre time</button>
+    </form>
+    <div class="slot-list">
+      ${state.adminData.availabilitySlots.map(slot => `
+        <article class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <strong>${escapeHtml(slot.date)} ${escapeHtml(slot.time)}</strong>
+              <small>${escapeHtml(slot.status)} - ${slot.active ? "aktiv" : "inaktiv"}${slot.note ? ` - ${escapeHtml(slot.note)}` : ""}</small>
+            </div>
+            <div class="admin-actions">
+              <button class="btn compact" data-edit-slot="${escapeHtml(slot.id)}" type="button">Rediger</button>
+              <button class="btn compact" data-delete-slot="${escapeHtml(slot.id)}" type="button" ${slot.bookingId ? "disabled" : ""}>Slett</button>
+            </div>
+          </div>
+        </article>
+      `).join("") || `<p class="form-status">Ingen ledige tider lagt inn enda.</p>`}
+    </div>
+  `;
+
+  $("#availabilityEditor").addEventListener("submit", async event => {
+    event.preventDefault();
+    const payload = formData(event.currentTarget);
+    payload.active = payload.active === "true";
+    await api("/api/admin/availability", { method: "PUT", body: JSON.stringify(payload) });
+    event.currentTarget.reset();
+    await loadPublic();
+    await loadAdmin();
+  });
+
+  $$("[data-edit-slot]").forEach(button => {
+    button.addEventListener("click", () => {
+      const slot = state.adminData.availabilitySlots.find(item => item.id === button.dataset.editSlot);
+      Object.entries(slot).forEach(([key, value]) => {
+        const field = $(`#availabilityEditor [name="${key}"]`);
+        if (field) field.value = String(value);
+      });
+    });
+  });
+
+  $$("[data-delete-slot]").forEach(button => {
+    button.addEventListener("click", async () => {
+      await api(`/api/admin/availability/${button.dataset.deleteSlot}`, { method: "DELETE" });
+      await loadPublic();
       await loadAdmin();
     });
   });
