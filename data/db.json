@@ -1,0 +1,73 @@
+{
+  "services": [
+    {
+      "id": "svc_8323f73d0375",
+      "nameNo": "Skinfade",
+      "nameEn": "Skin Fade",
+      "descriptionNo": "Ren fade med skarp overgang, styling og finish.",
+      "descriptionEn": "Clean fade with sharp blend, styling and finish.",
+      "price": 450,
+      "duration": 45,
+      "active": true
+    },
+    {
+      "id": "svc_25cb8a127411",
+      "nameNo": "Klipp og skjegg",
+      "nameEn": "Haircut and Beard",
+      "descriptionNo": "Komplett klipp, skjeggform og linjer med premium finish.",
+      "descriptionEn": "Complete cut, beard shaping and line-up with a premium finish.",
+      "price": 650,
+      "duration": 60,
+      "active": true
+    },
+    {
+      "id": "svc_b03071191504",
+      "nameNo": "Line-up",
+      "nameEn": "Line-up",
+      "descriptionNo": "Skarpe kanter rundt hårfeste og skjegg.",
+      "descriptionEn": "Sharp edges around hairline and beard.",
+      "price": 250,
+      "duration": 25,
+      "active": true
+    }
+  ],
+  "bookings": [],
+  "gallery": [
+    {
+      "id": "gal_18d6f112d063",
+      "image": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1200&q=80",
+      "title": "Low fade detail",
+      "category": "fades",
+      "published": true
+    },
+    {
+      "id": "gal_bb8e42846198",
+      "image": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1200&q=80",
+      "title": "Fresh profile",
+      "category": "cuts",
+      "published": true
+    },
+    {
+      "id": "gal_33786b88f887",
+      "image": "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1200&q=80",
+      "title": "Studio mood",
+      "category": "studio",
+      "published": true
+    }
+  ],
+  "messages": [],
+  "content": {
+    "aboutNo": "TW'Cutz handler om presisjon, identitet og selvtillit. Hver klipp skal sitte rent, føles personlig og gi kunden en premium opplevelse fra første melding til ferdig finish.",
+    "aboutEn": "TW'Cutz is about precision, identity and confidence. Every cut should feel clean, personal and premium from the first message to the final finish.",
+    "heroNoteNo": "Premium fades, skarpe linjer og en rolig bookingopplevelse.",
+    "heroNoteEn": "Premium fades, sharp lines and a smooth booking experience."
+  },
+  "adminUsers": [
+    {
+      "id": "adm_c5088a355a25",
+      "email": "admin@twcutz.no",
+      "passwordHash": "d4d23ed51ddb2b751abda87309b49666:7b5e6341c77341d25b4def37c34c6bd854b76690fdc7f046262f8abfac9c61cd",
+      "role": "owner"
+    }
+  ]
+}

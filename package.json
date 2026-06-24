@@ -1,0 +1,19 @@
+{
+  "name": "twcutz-site",
+  "version": "1.0.0",
+  "description": "Premium fullstack website for TW'Cutz with booking, admin and persistent content database.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "keywords": [
+    "barber",
+    "booking",
+    "portfolio",
+    "admin"
+  ],
+  "author": "TW'Cutz",
+  "license": "UNLICENSED",
+  "private": true
+}

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="TW'Cutz premium barber portfolio and booking. More than a cut.">
+    <title>TW'Cutz | More than a cut</title>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="TW'Cutz home">
+        <span class="brand-mark">TW</span>
+        <span>TW'Cutz</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#gallery" data-i18n="navGallery">Arbeid</a>
+        <a href="#services" data-i18n="navServices">Tjenester</a>
+        <a href="#about" data-i18n="navAbout">Om</a>
+        <a href="#booking" data-i18n="navBooking">Booking</a>
+        <a href="#contact" data-i18n="navContact">Kontakt</a>
+      </nav>
+      <div class="header-actions">
+        <div class="language-switch" aria-label="Language">
+          <button class="lang-btn active" type="button" data-lang="no">NO</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+        <a class="icon-link" href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6Zm9.7 1.7a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2ZM12 7.2a4.8 4.8 0 1 1 0 9.6 4.8 4.8 0 0 1 0-9.6Zm0 2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6Z"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-media" role="img" aria-label="Premium barber cut"></div>
+        <div class="hero-content">
+          <p class="eyebrow">@twcutz1</p>
+          <h1>TW'Cutz</h1>
+          <p class="tagline">
+            <span data-i18n="taglineMain">Mer enn en klipp</span>
+            <span class="slash">/</span>
+            <span>More than a cut</span>
+          </p>
+          <p class="hero-note" id="heroNote">Premium fades, skarpe linjer og en rolig bookingopplevelse.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#booking" data-i18n="bookNow">Book time</a>
+            <a class="btn ghost" href="#gallery" data-i18n="seeWork">Se arbeid</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="profile-strip" aria-label="Instagram profile">
+        <div class="profile-avatar">TW</div>
+        <div class="profile-main">
+          <div class="profile-top">
+            <h2>@twcutz1</h2>
+            <a class="btn compact" href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+          <div class="stats">
+            <span><strong id="galleryCount">0</strong> posts</span>
+            <span><strong>Premium</strong> fades</span>
+            <span><strong>NO/EN</strong> booking</span>
+          </div>
+          <p data-i18n="profileBio">Barber portfolio, skarpe detaljer og booking for kunder som vil ha en ren finish.</p>
+        </div>
+      </section>
+
+      <section id="gallery" class="section">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="galleryEyebrow">Portfolio</p>
+          <h2 data-i18n="galleryTitle">Arbeid og galleri</h2>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </section>
+
+      <section id="services" class="section muted-band">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="servicesEyebrow">Services</p>
+          <h2 data-i18n="servicesTitle">Tjenester og priser</h2>
+        </div>
+        <div class="service-list" id="serviceList"></div>
+      </section>
+
+      <section id="about" class="section about-layout">
+        <div>
+          <p class="eyebrow" data-i18n="aboutEyebrow">About</p>
+          <h2 data-i18n="aboutTitle">Om TW'Cutz</h2>
+        </div>
+        <p class="about-copy" id="aboutCopy"></p>
+      </section>
+
+      <section id="booking" class="section booking-layout">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="bookingEyebrow">Booking</p>
+          <h2 data-i18n="bookingTitle">Send bookingforespørsel</h2>
+        </div>
+        <form class="form-panel" id="bookingForm">
+          <label>
+            <span data-i18n="fieldService">Tjeneste</span>
+            <select name="serviceId" required></select>
+          </label>
+          <div class="form-row">
+            <label>
+              <span data-i18n="fieldDate">Dato</span>
+              <input name="date" type="date" required>
+            </label>
+            <label>
+              <span data-i18n="fieldTime">Klokkeslett</span>
+              <input name="time" type="time" required>
+            </label>
+          </div>
+          <label>
+            <span data-i18n="fieldName">Navn</span>
+            <input name="customerName" autocomplete="name" required>
+          </label>
+          <div class="form-row">
+            <label>
+              <span data-i18n="fieldPhone">Telefon</span>
+              <input name="phone" autocomplete="tel" required>
+            </label>
+            <label>
+              <span data-i18n="fieldEmail">E-post</span>
+              <input name="email" type="email" autocomplete="email">
+            </label>
+          </div>
+          <label>
+            <span data-i18n="fieldComment">Kommentar</span>
+            <textarea name="comment" rows="4"></textarea>
+          </label>
+          <button class="btn primary" type="submit" data-i18n="sendBooking">Send forespørsel</button>
+          <p class="form-status" id="bookingStatus" role="status"></p>
+        </form>
+      </section>
+
+      <section id="contact" class="section contact-layout muted-band">
+        <div>
+          <p class="eyebrow" data-i18n="contactEyebrow">Contact</p>
+          <h2 data-i18n="contactTitle">Kontakt</h2>
+          <p data-i18n="contactCopy">Send en melding, eller gå direkte til Instagram for rask kontakt.</p>
+          <a class="btn ghost" href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">Instagram</a>
+        </div>
+        <form class="form-panel" id="contactForm">
+          <label>
+            <span data-i18n="fieldName">Navn</span>
+            <input name="name" required>
+          </label>
+          <label>
+            <span data-i18n="fieldContact">E-post eller telefon</span>
+            <input name="contact" required>
+          </label>
+          <label>
+            <span data-i18n="fieldMessage">Melding</span>
+            <textarea name="message" rows="5" required></textarea>
+          </label>
+          <button class="btn primary" type="submit" data-i18n="sendMessage">Send melding</button>
+          <p class="form-status" id="contactStatus" role="status"></p>
+        </form>
+      </section>
+
+      <section id="admin" class="section admin-section">
+        <div class="section-heading">
+          <p class="eyebrow">Owner</p>
+          <h2>Adminpanel</h2>
+        </div>
+        <form class="form-panel admin-login" id="adminLogin">
+          <label>
+            <span>E-post</span>
+            <input name="email" type="email" value="admin@twcutz.no" required>
+          </label>
+          <label>
+            <span>Passord</span>
+            <input name="password" type="password" placeholder="ChangeMe123!" required>
+          </label>
+          <button class="btn primary" type="submit">Logg inn</button>
+          <p class="form-status" id="adminStatus" role="status"></p>
+        </form>
+        <div class="admin-dashboard hidden" id="adminDashboard">
+          <div class="admin-tabs">
+            <button class="tab active" data-tab="bookings" type="button">Bookinger</button>
+            <button class="tab" data-tab="servicesAdmin" type="button">Tjenester</button>
+            <button class="tab" data-tab="galleryAdmin" type="button">Galleri</button>
+            <button class="tab" data-tab="messagesAdmin" type="button">Meldinger</button>
+            <button class="tab" data-tab="contentAdmin" type="button">Tekst</button>
+          </div>
+          <div class="admin-pane active" id="bookings"></div>
+          <div class="admin-pane" id="servicesAdmin"></div>
+          <div class="admin-pane" id="galleryAdmin"></div>
+          <div class="admin-pane" id="messagesAdmin"></div>
+          <div class="admin-pane" id="contentAdmin"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>TW'Cutz</span>
+      <a href="#admin">Admin</a>
+      <a href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">@twcutz1</a>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
