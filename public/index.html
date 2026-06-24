@@ -8,18 +8,19 @@
     <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="stylesheet" href="/style.css">
   </head>
-  <body>
+  <body data-page="home">
     <header class="site-header">
-      <a class="brand" href="#home" aria-label="TW'Cutz home">
+      <a class="brand" href="/" aria-label="TW'Cutz home">
         <span class="brand-mark">TW</span>
         <span>TW'Cutz</span>
       </a>
       <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="#gallery" data-i18n="navGallery">Arbeid</a>
-        <a href="#services" data-i18n="navServices">Tjenester</a>
-        <a href="#about" data-i18n="navAbout">Om</a>
-        <a href="#booking" data-i18n="navBooking">Booking</a>
-        <a href="#contact" data-i18n="navContact">Kontakt</a>
+        <a href="/" data-page-link="home" data-i18n="navHome">Hjem</a>
+        <a href="/gallery.html" data-page-link="gallery" data-i18n="navGallery">Arbeid</a>
+        <a href="/services.html" data-page-link="services" data-i18n="navServices">Tjenester</a>
+        <a href="/about.html" data-page-link="about" data-i18n="navAbout">Om</a>
+        <a href="/booking.html" data-page-link="booking" data-i18n="navBooking">Booking</a>
+        <a href="/contact.html" data-page-link="contact" data-i18n="navContact">Kontakt</a>
       </nav>
       <div class="header-actions">
         <div class="language-switch" aria-label="Language">
@@ -33,7 +34,7 @@
     </header>
 
     <main>
-      <section id="home" class="hero">
+      <section class="hero">
         <div class="hero-media" role="img" aria-label="Premium barber cut"></div>
         <div class="hero-content">
           <p class="eyebrow">@twcutz1</p>
@@ -45,8 +46,8 @@
           </p>
           <p class="hero-note" id="heroNote">Premium fades, skarpe linjer og en rolig bookingopplevelse.</p>
           <div class="hero-actions">
-            <a class="btn primary" href="#booking" data-i18n="bookNow">Book time</a>
-            <a class="btn ghost" href="#gallery" data-i18n="seeWork">Se arbeid</a>
+            <a class="btn primary" href="/booking.html" data-i18n="bookNow">Book time</a>
+            <a class="btn ghost" href="/gallery.html" data-i18n="seeWork">Se arbeid</a>
           </div>
         </div>
       </section>
@@ -67,135 +68,25 @@
         </div>
       </section>
 
-      <section id="gallery" class="section">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="galleryEyebrow">Portfolio</p>
-          <h2 data-i18n="galleryTitle">Arbeid og galleri</h2>
-        </div>
-        <div class="gallery-grid" id="galleryGrid"></div>
-      </section>
-
-      <section id="services" class="section muted-band">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="servicesEyebrow">Services</p>
-          <h2 data-i18n="servicesTitle">Tjenester og priser</h2>
-        </div>
-        <div class="service-list" id="serviceList"></div>
-      </section>
-
-      <section id="about" class="section about-layout">
-        <div>
-          <p class="eyebrow" data-i18n="aboutEyebrow">About</p>
-          <h2 data-i18n="aboutTitle">Om TW'Cutz</h2>
-        </div>
-        <p class="about-copy" id="aboutCopy"></p>
-      </section>
-
-      <section id="booking" class="section booking-layout">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="bookingEyebrow">Booking</p>
-          <h2 data-i18n="bookingTitle">Send bookingforespørsel</h2>
-        </div>
-        <form class="form-panel" id="bookingForm">
-          <label>
-            <span data-i18n="fieldService">Tjeneste</span>
-            <select name="serviceId" required></select>
-          </label>
-          <div class="form-row">
-            <label>
-              <span data-i18n="fieldDate">Dato</span>
-              <input name="date" type="date" required>
-            </label>
-            <label>
-              <span data-i18n="fieldTime">Klokkeslett</span>
-              <input name="time" type="time" required>
-            </label>
-          </div>
-          <label>
-            <span data-i18n="fieldName">Navn</span>
-            <input name="customerName" autocomplete="name" required>
-          </label>
-          <div class="form-row">
-            <label>
-              <span data-i18n="fieldPhone">Telefon</span>
-              <input name="phone" autocomplete="tel" required>
-            </label>
-            <label>
-              <span data-i18n="fieldEmail">E-post</span>
-              <input name="email" type="email" autocomplete="email">
-            </label>
-          </div>
-          <label>
-            <span data-i18n="fieldComment">Kommentar</span>
-            <textarea name="comment" rows="4"></textarea>
-          </label>
-          <button class="btn primary" type="submit" data-i18n="sendBooking">Send forespørsel</button>
-          <p class="form-status" id="bookingStatus" role="status"></p>
-        </form>
-      </section>
-
-      <section id="contact" class="section contact-layout muted-band">
-        <div>
-          <p class="eyebrow" data-i18n="contactEyebrow">Contact</p>
-          <h2 data-i18n="contactTitle">Kontakt</h2>
-          <p data-i18n="contactCopy">Send en melding, eller gå direkte til Instagram for rask kontakt.</p>
-          <a class="btn ghost" href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">Instagram</a>
-        </div>
-        <form class="form-panel" id="contactForm">
-          <label>
-            <span data-i18n="fieldName">Navn</span>
-            <input name="name" required>
-          </label>
-          <label>
-            <span data-i18n="fieldContact">E-post eller telefon</span>
-            <input name="contact" required>
-          </label>
-          <label>
-            <span data-i18n="fieldMessage">Melding</span>
-            <textarea name="message" rows="5" required></textarea>
-          </label>
-          <button class="btn primary" type="submit" data-i18n="sendMessage">Send melding</button>
-          <p class="form-status" id="contactStatus" role="status"></p>
-        </form>
-      </section>
-
-      <section id="admin" class="section admin-section">
-        <div class="section-heading">
-          <p class="eyebrow">Owner</p>
-          <h2>Adminpanel</h2>
-        </div>
-        <form class="form-panel admin-login" id="adminLogin">
-          <label>
-            <span>E-post</span>
-            <input name="email" type="email" value="admin@twcutz.no" required>
-          </label>
-          <label>
-            <span>Passord</span>
-            <input name="password" type="password" placeholder="ChangeMe123!" required>
-          </label>
-          <button class="btn primary" type="submit">Logg inn</button>
-          <p class="form-status" id="adminStatus" role="status"></p>
-        </form>
-        <div class="admin-dashboard hidden" id="adminDashboard">
-          <div class="admin-tabs">
-            <button class="tab active" data-tab="bookings" type="button">Bookinger</button>
-            <button class="tab" data-tab="servicesAdmin" type="button">Tjenester</button>
-            <button class="tab" data-tab="galleryAdmin" type="button">Galleri</button>
-            <button class="tab" data-tab="messagesAdmin" type="button">Meldinger</button>
-            <button class="tab" data-tab="contentAdmin" type="button">Tekst</button>
-          </div>
-          <div class="admin-pane active" id="bookings"></div>
-          <div class="admin-pane" id="servicesAdmin"></div>
-          <div class="admin-pane" id="galleryAdmin"></div>
-          <div class="admin-pane" id="messagesAdmin"></div>
-          <div class="admin-pane" id="contentAdmin"></div>
-        </div>
+      <section class="section home-links">
+        <a class="feature-link" href="/gallery.html">
+          <span data-i18n="navGallery">Arbeid</span>
+          <small data-i18n="homeGallery">Se fades, klipp og detaljer.</small>
+        </a>
+        <a class="feature-link" href="/services.html">
+          <span data-i18n="navServices">Tjenester</span>
+          <small data-i18n="homeServices">Priser, varighet og behandlinger.</small>
+        </a>
+        <a class="feature-link" href="/booking.html">
+          <span data-i18n="navBooking">Booking</span>
+          <small data-i18n="homeBooking">Send forespørsel direkte.</small>
+        </a>
       </section>
     </main>
 
     <footer class="site-footer">
       <span>TW'Cutz</span>
-      <a href="#admin">Admin</a>
+      <a href="/admin.html">Admin</a>
       <a href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">@twcutz1</a>
     </footer>
 

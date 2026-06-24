@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin | TW'Cutz</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body data-page="admin">
+    <header class="site-header">
+      <a class="brand" href="/"><span class="brand-mark">TW</span><span>TW'Cutz</span></a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="/" data-page-link="home" data-i18n="navHome">Hjem</a>
+        <a href="/gallery.html" data-page-link="gallery" data-i18n="navGallery">Arbeid</a>
+        <a href="/services.html" data-page-link="services" data-i18n="navServices">Tjenester</a>
+        <a href="/about.html" data-page-link="about" data-i18n="navAbout">Om</a>
+        <a href="/booking.html" data-page-link="booking" data-i18n="navBooking">Booking</a>
+        <a href="/contact.html" data-page-link="contact" data-i18n="navContact">Kontakt</a>
+      </nav>
+      <div class="header-actions"><div class="language-switch"><button class="lang-btn active" type="button" data-lang="no">NO</button><button class="lang-btn" type="button" data-lang="en">EN</button></div></div>
+    </header>
+    <main>
+      <section class="page-hero"><p class="eyebrow">Owner</p><h1>Adminpanel</h1></section>
+      <section class="section admin-section">
+        <form class="form-panel admin-login" id="adminLogin">
+          <label><span>E-post</span><input name="email" type="email" value="admin@twcutz.no" required></label>
+          <label><span>Passord</span><input name="password" type="password" placeholder="ChangeMe123!" required></label>
+          <button class="btn primary" type="submit">Logg inn</button>
+          <p class="form-status" id="adminStatus" role="status"></p>
+        </form>
+        <div class="admin-dashboard hidden" id="adminDashboard">
+          <div class="admin-tabs">
+            <button class="tab active" data-tab="bookings" type="button">Bookinger</button>
+            <button class="tab" data-tab="servicesAdmin" type="button">Tjenester</button>
+            <button class="tab" data-tab="galleryAdmin" type="button">Galleri</button>
+            <button class="tab" data-tab="messagesAdmin" type="button">Meldinger</button>
+            <button class="tab" data-tab="contentAdmin" type="button">Tekst</button>
+          </div>
+          <div class="admin-pane active" id="bookings"></div>
+          <div class="admin-pane" id="servicesAdmin"></div>
+          <div class="admin-pane" id="galleryAdmin"></div>
+          <div class="admin-pane" id="messagesAdmin"></div>
+          <div class="admin-pane" id="contentAdmin"></div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>TW'Cutz</span><a href="/">Hjem</a><a href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">@twcutz1</a></footer>
+    <script src="/app.js"></script>
+  </body>
+</html>

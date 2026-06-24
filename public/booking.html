@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Booking | TW'Cutz</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body data-page="booking">
+    <header class="site-header">
+      <a class="brand" href="/"><span class="brand-mark">TW</span><span>TW'Cutz</span></a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="/" data-page-link="home" data-i18n="navHome">Hjem</a>
+        <a href="/gallery.html" data-page-link="gallery" data-i18n="navGallery">Arbeid</a>
+        <a href="/services.html" data-page-link="services" data-i18n="navServices">Tjenester</a>
+        <a href="/about.html" data-page-link="about" data-i18n="navAbout">Om</a>
+        <a href="/booking.html" data-page-link="booking" data-i18n="navBooking">Booking</a>
+        <a href="/contact.html" data-page-link="contact" data-i18n="navContact">Kontakt</a>
+      </nav>
+      <div class="header-actions"><div class="language-switch"><button class="lang-btn active" type="button" data-lang="no">NO</button><button class="lang-btn" type="button" data-lang="en">EN</button></div></div>
+    </header>
+    <main>
+      <section class="page-hero"><p class="eyebrow" data-i18n="bookingEyebrow">Booking</p><h1 data-i18n="bookingTitle">Send bookingforespørsel</h1></section>
+      <section class="section booking-layout">
+        <div class="booking-note"><p data-i18n="bookingCopy">Velg tjeneste, dato og klokkeslett. Eier bekrefter forespørselen i adminpanelet.</p></div>
+        <form class="form-panel" id="bookingForm">
+          <label><span data-i18n="fieldService">Tjeneste</span><select name="serviceId" required></select></label>
+          <div class="form-row"><label><span data-i18n="fieldDate">Dato</span><input name="date" type="date" required></label><label><span data-i18n="fieldTime">Klokkeslett</span><input name="time" type="time" required></label></div>
+          <label><span data-i18n="fieldName">Navn</span><input name="customerName" autocomplete="name" required></label>
+          <div class="form-row"><label><span data-i18n="fieldPhone">Telefon</span><input name="phone" autocomplete="tel" required></label><label><span data-i18n="fieldEmail">E-post</span><input name="email" type="email" autocomplete="email"></label></div>
+          <label><span data-i18n="fieldComment">Kommentar</span><textarea name="comment" rows="4"></textarea></label>
+          <button class="btn primary" type="submit" data-i18n="sendBooking">Send forespørsel</button>
+          <p class="form-status" id="bookingStatus" role="status"></p>
+        </form>
+      </section>
+    </main>
+    <footer class="site-footer"><span>TW'Cutz</span><a href="/admin.html">Admin</a><a href="https://www.instagram.com/twcutz1/" target="_blank" rel="noreferrer">@twcutz1</a></footer>
+    <script src="/app.js"></script>
+  </body>
+</html>

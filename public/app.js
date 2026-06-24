@@ -1,5 +1,6 @@
 const translations = {
   no: {
+    navHome: "Hjem",
     navGallery: "Arbeid",
     navServices: "Tjenester",
     navAbout: "Om",
@@ -17,6 +18,7 @@ const translations = {
     aboutTitle: "Om TW'Cutz",
     bookingEyebrow: "Booking",
     bookingTitle: "Send bookingforespørsel",
+    bookingCopy: "Velg tjeneste, dato og klokkeslett. Eier bekrefter forespørselen i adminpanelet.",
     fieldService: "Tjeneste",
     fieldDate: "Dato",
     fieldTime: "Klokkeslett",
@@ -34,9 +36,13 @@ const translations = {
     bookingOk: "Bookingforespørsel sendt. Eier kan se den i adminpanelet.",
     contactOk: "Meldingen er sendt.",
     error: "Noe gikk galt. Prøv igjen.",
-    minutes: "min"
+    minutes: "min",
+    homeGallery: "Se fades, klipp og detaljer.",
+    homeServices: "Priser, varighet og behandlinger.",
+    homeBooking: "Send forespørsel direkte."
   },
   en: {
+    navHome: "Home",
     navGallery: "Work",
     navServices: "Services",
     navAbout: "About",
@@ -54,6 +60,7 @@ const translations = {
     aboutTitle: "About TW'Cutz",
     bookingEyebrow: "Booking",
     bookingTitle: "Send booking request",
+    bookingCopy: "Choose a service, date and time. The owner confirms the request in the admin panel.",
     fieldService: "Service",
     fieldDate: "Date",
     fieldTime: "Time",
@@ -71,7 +78,10 @@ const translations = {
     bookingOk: "Booking request sent. The owner can see it in the admin panel.",
     contactOk: "Message sent.",
     error: "Something went wrong. Try again.",
-    minutes: "min"
+    minutes: "min",
+    homeGallery: "See fades, cuts and details.",
+    homeServices: "Prices, duration and treatments.",
+    homeBooking: "Send a request directly."
   }
 };
 
@@ -104,34 +114,57 @@ function applyTranslations() {
     node.textContent = t(node.dataset.i18n);
   });
   $$(".lang-btn").forEach(button => button.classList.toggle("active", button.dataset.lang === state.lang));
-  $("#heroNote").textContent = state.lang === "no" ? state.data.content.heroNoteNo : state.data.content.heroNoteEn;
-  $("#aboutCopy").textContent = state.lang === "no" ? state.data.content.aboutNo : state.data.content.aboutEn;
+  $$("[data-page-link]").forEach(link => {
+    link.classList.toggle("active", link.dataset.pageLink === document.body.dataset.page);
+  });
+
+  const heroNote = $("#heroNote");
+  if (heroNote) heroNote.textContent = state.lang === "no" ? state.data.content.heroNoteNo : state.data.content.heroNoteEn;
+
+  const aboutCopy = $("#aboutCopy");
+  if (aboutCopy) aboutCopy.textContent = state.lang === "no" ? state.data.content.aboutNo : state.data.content.aboutEn;
+
   renderServices();
   renderBookingOptions();
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 function renderGallery() {
-  $("#galleryCount").textContent = state.data.gallery.length;
-  $("#galleryGrid").innerHTML = state.data.gallery.map(item => `
+  const count = $("#galleryCount");
+  if (count) count.textContent = state.data.gallery.length;
+
+  const grid = $("#galleryGrid");
+  if (!grid) return;
+  grid.innerHTML = state.data.gallery.map(item => `
     <article class="gallery-item">
-      <img src="${item.image}" alt="${item.title}" loading="lazy">
+      <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy">
       <div class="gallery-caption">
-        <strong>${item.title}</strong>
-        <span>${item.category}</span>
+        <strong>${escapeHtml(item.title)}</strong>
+        <span>${escapeHtml(item.category)}</span>
       </div>
     </article>
   `).join("");
 }
 
 function renderServices() {
-  $("#serviceList").innerHTML = state.data.services.map(service => {
+  const list = $("#serviceList");
+  if (!list) return;
+  list.innerHTML = state.data.services.map(service => {
     const name = state.lang === "no" ? service.nameNo : service.nameEn;
     const description = state.lang === "no" ? service.descriptionNo : service.descriptionEn;
     return `
       <article class="service-card">
         <div>
-          <h3>${name}</h3>
-          <p>${description}</p>
+          <h3>${escapeHtml(name)}</h3>
+          <p>${escapeHtml(description)}</p>
         </div>
         <div class="service-meta">
           <span class="price">${service.price} kr</span>
@@ -144,13 +177,15 @@ function renderServices() {
 
 function renderBookingOptions() {
   const select = $("#bookingForm select[name='serviceId']");
+  if (!select) return;
   select.innerHTML = state.data.services.map(service => {
     const name = state.lang === "no" ? service.nameNo : service.nameEn;
-    return `<option value="${service.id}">${name} - ${service.price} kr</option>`;
+    return `<option value="${escapeHtml(service.id)}">${escapeHtml(name)} - ${service.price} kr</option>`;
   }).join("");
 }
 
 function setStatus(node, message, type = "") {
+  if (!node) return;
   node.textContent = message;
   node.className = `form-status ${type}`;
 }
@@ -166,29 +201,35 @@ async function loadPublic() {
 }
 
 function setupPublicForms() {
-  $("#bookingForm").addEventListener("submit", async event => {
-    event.preventDefault();
-    const status = $("#bookingStatus");
-    try {
-      await api("/api/bookings", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
-      event.currentTarget.reset();
-      setStatus(status, t("bookingOk"), "ok");
-    } catch {
-      setStatus(status, t("error"), "error");
-    }
-  });
+  const bookingForm = $("#bookingForm");
+  if (bookingForm) {
+    bookingForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const status = $("#bookingStatus");
+      try {
+        await api("/api/bookings", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
+        event.currentTarget.reset();
+        setStatus(status, t("bookingOk"), "ok");
+      } catch {
+        setStatus(status, t("error"), "error");
+      }
+    });
+  }
 
-  $("#contactForm").addEventListener("submit", async event => {
-    event.preventDefault();
-    const status = $("#contactStatus");
-    try {
-      await api("/api/contact", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
-      event.currentTarget.reset();
-      setStatus(status, t("contactOk"), "ok");
-    } catch {
-      setStatus(status, t("error"), "error");
-    }
-  });
+  const contactForm = $("#contactForm");
+  if (contactForm) {
+    contactForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const status = $("#contactStatus");
+      try {
+        await api("/api/contact", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
+        event.currentTarget.reset();
+        setStatus(status, t("contactOk"), "ok");
+      } catch {
+        setStatus(status, t("error"), "error");
+      }
+    });
+  }
 }
 
 function setupLanguage() {
@@ -207,7 +248,10 @@ async function loadAdmin() {
 }
 
 function setupAdmin() {
-  $("#adminLogin").addEventListener("submit", async event => {
+  const adminLogin = $("#adminLogin");
+  if (!adminLogin) return;
+
+  adminLogin.addEventListener("submit", async event => {
     event.preventDefault();
     try {
       const payload = await api("/api/admin/login", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
@@ -249,6 +293,7 @@ function serviceNameById(serviceId) {
 }
 
 function renderAdmin() {
+  if (!state.adminData) return;
   renderAdminBookings();
   renderAdminServices();
   renderAdminGallery();
@@ -257,19 +302,21 @@ function renderAdmin() {
 }
 
 function renderAdminBookings() {
-  $("#bookings").innerHTML = state.adminData.bookings.map(booking => `
+  const pane = $("#bookings");
+  if (!pane) return;
+  pane.innerHTML = state.adminData.bookings.map(booking => `
     <article class="admin-card">
       <div class="admin-card-header">
         <div>
-          <strong>${booking.customerName}</strong>
-          <small>${booking.date} ${booking.time} - ${serviceNameById(booking.serviceId)}</small>
+          <strong>${escapeHtml(booking.customerName)}</strong>
+          <small>${escapeHtml(booking.date)} ${escapeHtml(booking.time)} - ${escapeHtml(serviceNameById(booking.serviceId))}</small>
         </div>
-        <select data-booking-status="${booking.id}">
+        <select data-booking-status="${escapeHtml(booking.id)}">
           ${["ny", "bekreftet", "fullført", "kansellert"].map(status => `<option ${booking.status === status ? "selected" : ""}>${status}</option>`).join("")}
         </select>
       </div>
-      <small>${booking.phone}${booking.email ? ` - ${booking.email}` : ""}</small>
-      <p>${booking.comment || ""}</p>
+      <small>${escapeHtml(booking.phone)}${booking.email ? ` - ${escapeHtml(booking.email)}` : ""}</small>
+      <p>${escapeHtml(booking.comment || "")}</p>
     </article>
   `).join("") || `<p class="form-status">Ingen bookinger enda.</p>`;
 
@@ -282,7 +329,9 @@ function renderAdminBookings() {
 }
 
 function renderAdminServices() {
-  $("#servicesAdmin").innerHTML = `
+  const pane = $("#servicesAdmin");
+  if (!pane) return;
+  pane.innerHTML = `
     <form class="form-panel" id="serviceEditor">
       <div class="admin-form-grid">
         <input name="id" type="hidden">
@@ -299,10 +348,10 @@ function renderAdminServices() {
     ${state.adminData.services.map(service => `
       <article class="admin-card">
         <div class="admin-card-header">
-          <div><strong>${service.nameNo}</strong><small>${service.nameEn} - ${service.price} kr - ${service.duration} min</small></div>
+          <div><strong>${escapeHtml(service.nameNo)}</strong><small>${escapeHtml(service.nameEn)} - ${service.price} kr - ${service.duration} min</small></div>
           <div class="admin-actions">
-            <button class="btn compact" data-edit-service="${service.id}" type="button">Rediger</button>
-            <button class="btn compact" data-delete-service="${service.id}" type="button">Slett</button>
+            <button class="btn compact" data-edit-service="${escapeHtml(service.id)}" type="button">Rediger</button>
+            <button class="btn compact" data-delete-service="${escapeHtml(service.id)}" type="button">Slett</button>
           </div>
         </div>
         <small>${service.active ? "Aktiv" : "Inaktiv"}</small>
@@ -342,7 +391,9 @@ function renderAdminServices() {
 }
 
 function renderAdminGallery() {
-  $("#galleryAdmin").innerHTML = `
+  const pane = $("#galleryAdmin");
+  if (!pane) return;
+  pane.innerHTML = `
     <form class="form-panel" id="galleryEditor">
       <div class="admin-form-grid">
         <input name="id" type="hidden">
@@ -357,10 +408,10 @@ function renderAdminGallery() {
     ${state.adminData.gallery.map(item => `
       <article class="admin-card">
         <div class="admin-card-header">
-          <div><strong>${item.title}</strong><small>${item.category} - ${item.published ? "publisert" : "skjult"}</small></div>
+          <div><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.category)} - ${item.published ? "publisert" : "skjult"}</small></div>
           <div class="admin-actions">
-            <button class="btn compact" data-edit-gallery="${item.id}" type="button">Rediger</button>
-            <button class="btn compact" data-delete-gallery="${item.id}" type="button">Slett</button>
+            <button class="btn compact" data-edit-gallery="${escapeHtml(item.id)}" type="button">Rediger</button>
+            <button class="btn compact" data-delete-gallery="${escapeHtml(item.id)}" type="button">Slett</button>
           </div>
         </div>
       </article>
@@ -407,15 +458,17 @@ function renderAdminGallery() {
 }
 
 function renderAdminMessages() {
-  $("#messagesAdmin").innerHTML = state.adminData.messages.map(message => `
+  const pane = $("#messagesAdmin");
+  if (!pane) return;
+  pane.innerHTML = state.adminData.messages.map(message => `
     <article class="admin-card">
       <div class="admin-card-header">
-        <div><strong>${message.name}</strong><small>${message.contact} - ${new Date(message.createdAt).toLocaleString()}</small></div>
-        <select data-message-status="${message.id}">
+        <div><strong>${escapeHtml(message.name)}</strong><small>${escapeHtml(message.contact)} - ${new Date(message.createdAt).toLocaleString()}</small></div>
+        <select data-message-status="${escapeHtml(message.id)}">
           ${["ny", "lest", "besvart"].map(status => `<option ${message.status === status ? "selected" : ""}>${status}</option>`).join("")}
         </select>
       </div>
-      <p>${message.message}</p>
+      <p>${escapeHtml(message.message)}</p>
     </article>
   `).join("") || `<p class="form-status">Ingen meldinger enda.</p>`;
 
@@ -428,13 +481,15 @@ function renderAdminMessages() {
 }
 
 function renderAdminContent() {
+  const pane = $("#contentAdmin");
+  if (!pane) return;
   const content = state.adminData.content;
-  $("#contentAdmin").innerHTML = `
+  pane.innerHTML = `
     <form class="form-panel" id="contentEditor">
-      <label><span>Hero note NO</span><textarea name="heroNoteNo" rows="2">${content.heroNoteNo}</textarea></label>
-      <label><span>Hero note EN</span><textarea name="heroNoteEn" rows="2">${content.heroNoteEn}</textarea></label>
-      <label><span>Om tekst NO</span><textarea name="aboutNo" rows="5">${content.aboutNo}</textarea></label>
-      <label><span>About text EN</span><textarea name="aboutEn" rows="5">${content.aboutEn}</textarea></label>
+      <label><span>Hero note NO</span><textarea name="heroNoteNo" rows="2">${escapeHtml(content.heroNoteNo)}</textarea></label>
+      <label><span>Hero note EN</span><textarea name="heroNoteEn" rows="2">${escapeHtml(content.heroNoteEn)}</textarea></label>
+      <label><span>Om tekst NO</span><textarea name="aboutNo" rows="5">${escapeHtml(content.aboutNo)}</textarea></label>
+      <label><span>About text EN</span><textarea name="aboutEn" rows="5">${escapeHtml(content.aboutEn)}</textarea></label>
       <button class="btn primary" type="submit">Lagre tekst</button>
     </form>
   `;
