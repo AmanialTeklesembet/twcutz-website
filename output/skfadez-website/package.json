@@ -1,7 +1,7 @@
 {
-  "name": "mosazgi-site",
+  "name": "skfadez-site",
   "version": "1.0.0",
-  "description": "Premium fullstack barber website for Mosazgi with booking, admin and persistent content database.",
+  "description": "Premium fullstack barber website for SKFADEZ with booking, admin and persistent content database.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,7 +13,7 @@
     "portfolio",
     "admin"
   ],
-  "author": "Mosazgi",
+  "author": "SKFADEZ",
   "license": "UNLICENSED",
   "private": true
 }

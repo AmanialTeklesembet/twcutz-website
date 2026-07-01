@@ -1,6 +1,6 @@
-# Mosazgi Website
+# SKFADEZ Website
 
-Premium barber portfolio and booking site for Mosazgi Mussie.
+Premium barber portfolio and booking site for SKFADEZ.
 
 ## Run locally
 
@@ -12,8 +12,8 @@ Open `http://localhost:3000`.
 
 Default owner login:
 
-- Email: `mosazgi.mussie123@gmail.com`
-- Password: `mosazgi`
+- Email: `admin@skfadez.no`
+- Password: `skfadez`
 
 For a real deployment, set these environment variables before starting:
 

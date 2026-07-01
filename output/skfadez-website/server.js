@@ -8,9 +8,9 @@ const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
 const DATA_DIR = path.join(ROOT, "data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
-const SECRET = process.env.SESSION_SECRET || "mosazgi-local-dev-secret-change-me";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "mosazgi.mussie123@gmail.com";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "mosazgi";
+const SECRET = process.env.SESSION_SECRET || "skfadez-local-dev-secret-change-me";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@skfadez.no";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "skfadez";
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -49,11 +49,11 @@ function createSeedData() {
     services: [
       {
         id: id("svc"),
-        nameNo: "Herreklipp",
-        nameEn: "Men's Haircut",
-        descriptionNo: "Ren klipp med fokus på form, detaljer og en ryddig finish.",
-        descriptionEn: "Clean cut with focus on shape, details and a tidy finish.",
-        price: 450,
+        nameNo: "Skinfade",
+        nameEn: "Skin Fade",
+        descriptionNo: "Skarp skinfade med ren overgang, styling og premium finish.",
+        descriptionEn: "Sharp skin fade with clean blend, styling and premium finish.",
+        price: 500,
         duration: 45,
         active: true
       },
@@ -61,19 +61,19 @@ function createSeedData() {
         id: id("svc"),
         nameNo: "Klipp og skjegg",
         nameEn: "Haircut and Beard",
-        descriptionNo: "Komplett klipp, skjeggform og linjer med rolig kundebehandling.",
-        descriptionEn: "Complete cut, beard shaping and line-up with calm customer care.",
-        price: 650,
+        descriptionNo: "Komplett klipp, skjeggform, line-up og rolig finish.",
+        descriptionEn: "Complete haircut, beard shape, line-up and calm finish.",
+        price: 700,
         duration: 60,
         active: true
       },
       {
         id: id("svc"),
-        nameNo: "Line-up",
-        nameEn: "Line-up",
-        descriptionNo: "Skarpe kanter rundt hårfeste og skjegg.",
-        descriptionEn: "Sharp edges around hairline and beard.",
-        price: 250,
+        nameNo: "Line-up / Shape-up",
+        nameEn: "Line-up / Shape-up",
+        descriptionNo: "Presise kanter rundt hårfeste og skjegg for en fresh finish.",
+        descriptionEn: "Precise edges around hairline and beard for a fresh finish.",
+        price: 300,
         duration: 25,
         active: true
       }
@@ -130,10 +130,10 @@ function createSeedData() {
     ],
     messages: [],
     content: {
-      aboutNo: "Mosazgi Mussie er en serviceorientert barber med erfaring fra Flawless barbershop. CV-en viser arbeid med hårklipp, rengjøring, administrativt arbeid og kundebehandling, i tillegg til sterke språkferdigheter på norsk, engelsk, tigrinja og spansk.",
-      aboutEn: "Mosazgi Mussie is a service-minded barber with experience from Flawless barbershop. His CV highlights haircutting, cleaning, administrative work and customer care, with strong language skills in Norwegian, English, Tigrinya and Spanish.",
-      heroNoteNo: "Frisør med erfaring fra Flawless barbershop, fokus på rene detaljer og god kundebehandling.",
-      heroNoteEn: "Barber with experience from Flawless barbershop, focused on clean details and good customer care."
+      aboutNo: "SKFADEZ er et premium fade-konsept bygget rundt skarpe overganger, rene linjer og en bookingopplevelse som føles like profesjonell som resultatet.",
+      aboutEn: "SKFADEZ is a premium fade concept built around sharp blends, clean line-ups and a booking experience that feels as professional as the result.",
+      heroNoteNo: "Premium fades, rene linjer og en eksklusiv bookingopplevelse i svart, hvitt og gull.",
+      heroNoteEn: "Premium fades, clean line-ups and an exclusive black, white and gold booking experience."
     },
     adminUsers: [
       {
@@ -209,11 +209,6 @@ function sanitizeText(value, max = 500) {
   return String(value || "").trim().slice(0, max);
 }
 
-function toBoolean(value) {
-  if (typeof value === "boolean") return value;
-  return String(value).toLowerCase() === "true";
-}
-
 function signToken(user) {
   const payload = Buffer.from(JSON.stringify({
     sub: user.id,
@@ -247,15 +242,14 @@ function requireAdmin(req, res) {
 }
 
 function publicPayload(db) {
-  const today = new Date().toISOString().slice(0, 10);
   return {
     services: db.services.filter(service => service.active),
     availabilitySlots: db.availabilitySlots
-      .filter(slot => slot.active && slot.status === "ledig" && slot.date >= today)
+      .filter(slot => slot.active && slot.status === "ledig")
       .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)),
     gallery: db.gallery.filter(item => item.published),
     content: db.content,
-    contactUrl: "mailto:mosazgi.mussie123@gmail.com",
+    contactUrl: "mailto:admin@skfadez.no",
     phone: "92137051"
   };
 }
@@ -362,7 +356,7 @@ async function handleApi(req, res, url) {
       descriptionEn: sanitizeText(body.descriptionEn, 500),
       price: Number(body.price || 0),
       duration: Number(body.duration || 0),
-      active: toBoolean(body.active)
+      active: Boolean(body.active)
     }, "svc");
     writeDb(db);
     return sendJson(res, 200, { ok: true, service });
@@ -404,7 +398,7 @@ async function handleApi(req, res, url) {
       date: sanitizeText(body.date, 20),
       time: sanitizeText(body.time, 20),
       status: ["ledig", "reservert", "stengt"].includes(body.status) ? body.status : "ledig",
-      active: toBoolean(body.active),
+      active: Boolean(body.active),
       note: sanitizeText(body.note, 200)
     }, "slot");
     if (!slot.date || !slot.time) {
@@ -497,6 +491,6 @@ const server = http.createServer(async (req, res) => {
 
 ensureDb();
 server.listen(PORT, () => {
-  console.log(`Mosazgi site running at http://localhost:${PORT}`);
+  console.log(`SKFADEZ site running at http://localhost:${PORT}`);
   console.log(`Admin login: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
 });

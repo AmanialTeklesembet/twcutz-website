@@ -2,10 +2,10 @@
   "services": [
     {
       "id": "svc_973af7a03b83",
-      "nameNo": "Skinfade",
-      "nameEn": "Skin Fade",
-      "descriptionNo": "Ren fade med skarp overgang, styling og finish.",
-      "descriptionEn": "Clean fade with sharp blend, styling and finish.",
+      "nameNo": "Herreklipp",
+      "nameEn": "Men's Haircut",
+      "descriptionNo": "Ren klipp med fokus på form, detaljer og en ryddig finish.",
+      "descriptionEn": "Clean cut with focus on shape, details and a tidy finish.",
       "price": 450,
       "duration": 45,
       "active": true
@@ -14,8 +14,8 @@
       "id": "svc_5ac1d3c2caba",
       "nameNo": "Klipp og skjegg",
       "nameEn": "Haircut and Beard",
-      "descriptionNo": "Komplett klipp, skjeggform og linjer med premium finish.",
-      "descriptionEn": "Complete cut, beard shaping and line-up with a premium finish.",
+      "descriptionNo": "Komplett klipp, skjeggform og linjer med rolig kundebehandling.",
+      "descriptionEn": "Complete cut, beard shaping and line-up with calm customer care.",
       "price": 650,
       "duration": 60,
       "active": true
@@ -31,19 +31,42 @@
       "active": true
     }
   ],
-  "bookings": [],
+  "bookings": [
+    {
+      "id": "book_d529eb2e4dd7",
+      "customerName": "slim",
+      "phone": "40962451",
+      "email": "amanialzermaryam01@gmail.com",
+      "serviceId": "svc_4289ce610d25",
+      "slotId": "slot_20260625_1200",
+      "date": "2026-06-27",
+      "time": "12:00",
+      "status": "ny",
+      "comment": "ggggggg",
+      "createdAt": "2026-06-26T09:38:37.963Z"
+    }
+  ],
   "availabilitySlots": [
     {
-      "id": "slot_20260625_1200",
-      "date": "2026-06-25",
-      "time": "12:00",
+      "id": "slot_20260701_0200",
+      "date": "2026-07-01",
+      "time": "02:00",
       "status": "ledig",
       "active": true,
       "note": "Åpen time"
     },
     {
+      "id": "slot_20260625_1200",
+      "date": "2026-06-27",
+      "time": "12:00",
+      "status": "reservert",
+      "active": true,
+      "note": "Åpen time",
+      "bookingId": "book_d529eb2e4dd7"
+    },
+    {
       "id": "slot_20260625_1430",
-      "date": "2026-06-25",
+      "date": "2026-06-27",
       "time": "14:30",
       "status": "ledig",
       "active": true,
@@ -51,7 +74,7 @@
     },
     {
       "id": "slot_20260626_1600",
-      "date": "2026-06-26",
+      "date": "2026-06-28",
       "time": "16:00",
       "status": "ledig",
       "active": true,
@@ -62,37 +85,37 @@
     {
       "id": "gal_580279afba3c",
       "image": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1200&q=80",
-      "title": "Low fade detail",
+      "title": "Clean fade detail",
       "category": "fades",
       "published": true
     },
     {
       "id": "gal_2de8123846e5",
       "image": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1200&q=80",
-      "title": "Fresh profile",
+      "title": "Fresh barber profile",
       "category": "cuts",
       "published": true
     },
     {
       "id": "gal_6ba415cafb0a",
       "image": "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1200&q=80",
-      "title": "Studio mood",
+      "title": "Barbershop mood",
       "category": "studio",
       "published": true
     }
   ],
   "messages": [],
   "content": {
-    "aboutNo": "TW'Cutz handler om presisjon, identitet og selvtillit. Hver klipp skal sitte rent, føles personlig og gi kunden en premium opplevelse fra første melding til ferdig finish.",
-    "aboutEn": "TW'Cutz is about precision, identity and confidence. Every cut should feel clean, personal and premium from the first message to the final finish.",
-    "heroNoteNo": "Premium fades, skarpe linjer og en rolig bookingopplevelse.",
-    "heroNoteEn": "Premium fades, sharp lines and a smooth booking experience."
+    "aboutNo": "Mosazgi Mussie er en serviceorientert barber med erfaring fra Flawless barbershop. CV-en viser arbeid med hårklipp, rengjøring, administrativt arbeid og kundebehandling, i tillegg til sterke språkferdigheter på norsk, engelsk, tigrinja og spansk.",
+    "aboutEn": "Mosazgi Mussie is a service-minded barber with experience from Flawless barbershop. His CV highlights haircutting, cleaning, administrative work and customer care, with strong language skills in Norwegian, English, Tigrinya and Spanish.",
+    "heroNoteNo": "Frisør med erfaring fra Flawless barbershop, fokus på rene detaljer og god kundebehandling.",
+    "heroNoteEn": "Barber with experience from Flawless barbershop, focused on clean details and good customer care."
   },
   "adminUsers": [
     {
       "id": "adm_7d4d37d19b09",
-      "email": "admin@twcutz.no",
-      "passwordHash": "b23bef5c35414ed9eeb535234ca663de:db1e56117cfefcb02aeb5d0d8cfacc17c8bc94b53e60efb607d8834bc6abfacd",
+      "email": "mosazgi.mussie123@gmail.com",
+      "passwordHash": "69ca02818d913f74c634694276859e0b:60bf57d644ab57b6eba789c8c6cf522d217fc5f2710db639941dac7d716c2aa0",
       "role": "owner"
     }
   ]

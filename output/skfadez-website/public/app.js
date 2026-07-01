@@ -6,16 +6,16 @@ const translations = {
     navAbout: "Om",
     navBooking: "Booking",
     navContact: "Kontakt",
-    taglineMain: "Ren klipp, rolig opplevelse",
+    taglineMain: "Sharp fades, clean finish",
     bookNow: "Book time",
     seeWork: "Se arbeid",
-    profileBio: "Barberprofil med erfaring i klipp, rengjøring, administrasjon og kundebehandling.",
+    profileBio: "Premium fade studio med fokus på skarpe overganger, rene linjer og en eksklusiv bookingopplevelse.",
     galleryEyebrow: "Portfolio",
     galleryTitle: "Arbeid og galleri",
     servicesEyebrow: "Services",
     servicesTitle: "Tjenester og priser",
     aboutEyebrow: "About",
-    aboutTitle: "Om Mosazgi",
+    aboutTitle: "Om SKFADEZ",
     bookingEyebrow: "Booking",
     bookingTitle: "Send bookingforespørsel",
     bookingCopy: "Velg tjeneste, dato og en ledig time. Eier bekrefter forespørselen i adminpanelet.",
@@ -26,7 +26,7 @@ const translations = {
     fieldPhone: "Telefon",
     fieldEmail: "E-post",
     fieldComment: "Kommentar",
-    fieldContact: "E-post eller telefon",
+    fieldContact: "Kontakt eller telefon",
     fieldMessage: "Melding",
     sendBooking: "Send forespørsel",
     contactEyebrow: "Contact",
@@ -49,16 +49,16 @@ const translations = {
     navAbout: "About",
     navBooking: "Booking",
     navContact: "Contact",
-    taglineMain: "Fresh cuts, calm finish",
+    taglineMain: "Sharp fades, clean finish",
     bookNow: "Book now",
     seeWork: "See work",
-    profileBio: "Barber profile with experience in cuts, cleaning, administration and customer care.",
+    profileBio: "Premium fade studio focused on sharp blends, clean line-ups and an exclusive booking experience.",
     galleryEyebrow: "Portfolio",
     galleryTitle: "Work and gallery",
     servicesEyebrow: "Services",
     servicesTitle: "Services and prices",
     aboutEyebrow: "About",
-    aboutTitle: "About Mosazgi",
+    aboutTitle: "About SKFADEZ",
     bookingEyebrow: "Booking",
     bookingTitle: "Send booking request",
     bookingCopy: "Choose a service, date and available time. The owner confirms the request in the admin panel.",
@@ -88,9 +88,9 @@ const translations = {
 };
 
 let state = {
-  lang: localStorage.getItem("mosazgi_lang") || "no",
+  lang: localStorage.getItem("skfadez_lang") || "no",
   data: { services: [], availabilitySlots: [], gallery: [], content: {} },
-  adminToken: localStorage.getItem("mosazgi_admin_token") || "",
+  adminToken: localStorage.getItem("skfadez_admin_token") || "",
   adminData: null
 };
 
@@ -186,13 +186,10 @@ function renderBookingOptions() {
     return `<option value="${escapeHtml(service.id)}">${escapeHtml(name)} - ${service.price} kr</option>`;
   }).join("");
   const dateInput = $("#bookingForm input[name='date']");
-  if (dateInput) {
-    const today = new Date().toISOString().slice(0, 10);
-    const firstSlot = state.data.availabilitySlots.find(slot => slot.date >= today);
-    dateInput.min = today;
-    if (!dateInput.value || dateInput.value < today) {
-      dateInput.value = firstSlot ? firstSlot.date : today;
-    }
+  if (dateInput && !dateInput.value) {
+    const firstSlot = state.data.availabilitySlots[0];
+    dateInput.min = new Date().toISOString().slice(0, 10);
+    if (firstSlot) dateInput.value = firstSlot.date;
   }
 }
 
@@ -275,7 +272,7 @@ function setupLanguage() {
   $$(".lang-btn").forEach(button => {
     button.addEventListener("click", () => {
       state.lang = button.dataset.lang;
-      localStorage.setItem("mosazgi_lang", state.lang);
+      localStorage.setItem("skfadez_lang", state.lang);
       applyTranslations();
     });
   });
@@ -295,7 +292,7 @@ function setupAdmin() {
     try {
       const payload = await api("/api/admin/login", { method: "POST", body: JSON.stringify(formData(event.currentTarget)) });
       state.adminToken = payload.token;
-      localStorage.setItem("mosazgi_admin_token", payload.token);
+      localStorage.setItem("skfadez_admin_token", payload.token);
       $("#adminLogin").classList.add("hidden");
       $("#adminDashboard").classList.remove("hidden");
       setStatus($("#adminStatus"), "");
@@ -317,7 +314,7 @@ function setupAdmin() {
   $("#adminLogout")?.addEventListener("click", () => {
     state.adminToken = "";
     state.adminData = null;
-    localStorage.removeItem("mosazgi_admin_token");
+    localStorage.removeItem("skfadez_admin_token");
     $("#adminLogin").classList.remove("hidden");
     $("#adminDashboard").classList.add("hidden");
     setStatus($("#adminStatus"), "Du er logget ut.", "ok");
@@ -328,7 +325,7 @@ function setupAdmin() {
     $("#adminDashboard").classList.remove("hidden");
     loadAdmin().catch(() => {
       state.adminToken = "";
-      localStorage.removeItem("mosazgi_admin_token");
+      localStorage.removeItem("skfadez_admin_token");
       $("#adminLogin").classList.remove("hidden");
       $("#adminDashboard").classList.add("hidden");
     });
@@ -405,13 +402,12 @@ function renderAdminAvailability() {
   if (!pane) return;
   pane.innerHTML = `
     <form class="form-panel" id="availabilityEditor">
-      <p class="form-status">For at en time skal vises i booking må den stå som Ledig og Aktiv.</p>
       <div class="admin-form-grid">
         <input name="id" type="hidden">
         <label><span>Dato</span><input name="date" type="date" required></label>
         <label><span>Klokkeslett</span><input name="time" type="time" required></label>
-        <label><span>Status</span><select name="status"><option value="ledig">Ledig - vises for kunder</option><option value="stengt">Stengt</option><option value="reservert">Reservert</option></select></label>
-        <label><span>Synlig</span><select name="active"><option value="true">Aktiv - vis i booking</option><option value="false">Inaktiv - skjul</option></select></label>
+        <label><span>Status</span><select name="status"><option value="ledig">Ledig</option><option value="stengt">Stengt</option><option value="reservert">Reservert</option></select></label>
+        <label><span>Aktiv</span><select name="active"><option value="true">Aktiv</option><option value="false">Inaktiv</option></select></label>
         <label class="wide"><span>Notat</span><input name="note" placeholder="F.eks. åpen time, drop-in, kun fades"></label>
       </div>
       <button class="btn primary" type="submit">Lagre time</button>
